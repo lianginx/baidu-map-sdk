@@ -25,13 +25,20 @@ composer require lianginx/baidu-map-sdk
 ## 使用
 
 ```php
-// 设置 API Key, 全局仅需设置一次
-Config::setApiKey('your api key');
+$ak = 'your api key';
+$default_service_id = 123456;
+
+$entity = new Entity($ak, $default_service_id);
+$entity_name = 'test_entity';
 
 // 新增终端
-$service_id = 1234567;
-$entity_name = 'test_entity';
-Entity::add($service_id, $entity_name);
+$entity->add($service_id, $entity_name);
+
+// 更新终端
+$entity->update($entity_name, 'hello world');
+
+// 删除终端
+$entity->delete($entity_name);
 
 // 其他接口...
 ```
