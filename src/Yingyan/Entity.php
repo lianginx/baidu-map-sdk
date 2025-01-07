@@ -2,14 +2,14 @@
 
 namespace BaiduMapSdk\Yingyan;
 
-use BaiduMapSdk\Config;
+use BaiduMapSdk\Applition;
 use BaiduMapSdk\Enum\Yingyan\EntityEnum;
 
 /**
  * 终端管理
  * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/entity
  */
-class Entity
+class Entity extends Applition
 {
     /**
      * 添加终端
@@ -19,15 +19,22 @@ class Entity
      * @param $column_key 开发者自定义字段
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/entity#add%E2%80%94%E2%80%94%E6%B7%BB%E5%8A%A0entity
      */
-    public static function add(int $service_id, string $entity_name, string $entity_desc = null, ...$column_key): void
-    {
+    public function add(
+        string $entity_name,
+        string $entity_desc = null,
+        int $service_id = null,
+        ...$column_key
+    ): void {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'entity_name' => urlencode($entity_name),
         ];
         if ($entity_desc !== null) {
             $params['entity_desc'] = urlencode($entity_desc);
+        }
+        if ($service_id === null) {
+            $params['service_id'] = $this->getDefaultServiceId();
         }
         $params = array_merge($params, $column_key);
         new Client(
@@ -47,11 +54,15 @@ class Entity
      * @param $column_key 开发者自定义字段
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/entity#update%E2%80%94%E2%80%94%E6%9B%B4%E6%96%B0entity
      */
-    public static function update(int $service_id, string $entity_name, string $entity_desc = null, ...$column_key): void
-    {
+    public function update(
+        string $entity_name,
+        string $entity_desc = null,
+        int $service_id = null,
+        ...$column_key
+    ): void {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'entity_name' => urlencode($entity_name),
         ];
         if ($entity_desc !== null) {
@@ -73,17 +84,20 @@ class Entity
      * @param $entity_name 终端名称，作为其唯一标识
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/entity#delete%E2%80%94%E2%80%94%E5%88%A0%E9%99%A4entity
      */
-    public static function delete(int $service_id, string $entity_name)
-    {
+    public function delete(
+        string $entity_name,
+        int $service_id = null
+    ) {
+        $params = [
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
+            'entity_name' => urlencode($entity_name),
+        ];
         new Client(
             EntityEnum::DELETE_METHOD,
             EntityEnum::DELETE,
             [
-                'form_params' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                ],
+                'form_params' => $params,
             ],
         );
     }
@@ -97,16 +111,16 @@ class Entity
      * @param $page_size 分页大小
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/entity#list%E2%80%94%E2%80%94%E6%9F%A5%E8%AF%A2entity
      */
-    public static function list(
-        int $service_id,
+    public function list(
         array $filter = null,
         string $coord_type_output = 'bd09ll',
         int $page_index = 1,
         int $page_size = 100,
+        int $service_id = null
     ) {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'coord_type_output' => urlencode($coord_type_output),
             'page_index' => $page_index,
             'page_size' => $page_size,

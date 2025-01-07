@@ -2,14 +2,14 @@
 
 namespace BaiduMapSdk\Yingyan;
 
-use BaiduMapSdk\Config;
+use BaiduMapSdk\Applition;
 use BaiduMapSdk\Enum\Yingyan\TrackEnum;
 
 /**
  * 轨迹管理
  * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/trackupload
  */
-class Track
+class Track extends Applition
 {
 
     /**
@@ -28,8 +28,7 @@ class Track
      * @param $column_key 自定义字段
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/trackupload#addpoint%E2%80%94%E2%80%94%E4%B8%8A%E4%BC%A0%E5%8D%95%E4%B8%AA%E8%BD%A8%E8%BF%B9%E7%82%B9
      */
-    public static function addPoint(
-        int $service_id,
+    public function addPoint(
         string $entity_name,
         float $latitude,
         float $longitude,
@@ -40,11 +39,12 @@ class Track
         float $height = null,
         float $radius = null,
         string $object_name = null,
+        int $service_id = null,
         ...$column_key
     ) {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'entity_name' => urlencode($entity_name),
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -82,16 +82,18 @@ class Track
      * @param $point_list 轨迹点列表，总数不超过100个
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/trackupload#addpoints%E2%80%94%E2%80%94%E6%89%B9%E9%87%8F%E6%B7%BB%E5%8A%A0%E8%BD%A8%E8%BF%B9%E7%82%B9
      */
-    public static function addPoints(string $service_id, array $point_list): array
-    {
+    public function addPoints(
+        array $point_list,
+        string $service_id = null
+    ): array {
         $client = new Client(
             TrackEnum::ADD_POINTS_METHOD,
             TrackEnum::ADD_POINTS,
             [
                 'throw_api_error' => false,
                 'form_params' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
+                    'ak' => $this->getAK(),
+                    'service_id' => $service_id ?? $this->getDefaultServiceId(),
                     'point_list' => json_encode($point_list),
                 ],
             ]
@@ -107,19 +109,19 @@ class Track
      * @param $coord_type_output 返回坐标类型: bd09ll - 百度经纬度坐标/gcj02 - 国测局加密坐标
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/trackprocess#getlatestpoint%E2%80%94%E2%80%94%E5%AE%9E%E6%97%B6%E7%BA%A0%E5%81%8F
      */
-    public static function getLatestPoint(
-        int $service_id,
+    public function getLatestPoint(
         string $entity_name,
         string $process_option = 'denoise_grade=1,need_mapmatch=0,transport_mode=auto',
-        string $coord_type_output = 'bd09ll'
+        string $coord_type_output = 'bd09ll',
+        int $service_id = null
     ): array {
         $client = new Client(
             TrackEnum::GET_LATEST_POINT_METHOD,
             TrackEnum::GET_LATEST_POINT,
             [
                 'query' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
+                    'ak' => $this->getAK(),
+                    'service_id' => $service_id ?? $this->getDefaultServiceId(),
                     'entity_name' => urlencode($entity_name),
                     'process_option' => $process_option,
                     'coord_type_output' => $coord_type_output,
@@ -141,19 +143,19 @@ class Track
      * @param $low_speed_threshold 低速阈值
      * @link https://lbsyun.baidu.com/faq/api?title=yingyan/api/v3/trackprocess#getdistance%E2%80%94%E2%80%94%E6%9F%A5%E8%AF%A2%E8%BD%A8%E8%BF%B9%E9%87%8C%E7%A8%8B
      */
-    public static function getDistance(
-        string $service_id,
+    public function getDistance(
         string $entity_name,
         int $start_time,
         int $end_time,
         bool $is_processed = false,
         string $process_option = 'denoise_grade=1,need_mapmatch=0,transport_mode=auto',
         string $supplement_mode = 'no_supplement',
-        float $low_speed_threshold = null
+        float $low_speed_threshold = null,
+        string $service_id = null
     ): array {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'entity_name' => urlencode($entity_name),
             'start_time' => $start_time,
             'end_time' => $end_time,
@@ -190,8 +192,7 @@ class Track
      * @param $page_index 分页索引
      * @param $page_size 分页大小
      */
-    public static function getTrack(
-        string $service_id,
+    public function getTrack(
         string $entity_name,
         int $start_time,
         int $end_time,
@@ -203,11 +204,12 @@ class Track
         string $coord_type_output = 'bd09ll',
         string $sort_type = 'asc',
         int $page_index = 1,
-        int $page_size = 100
+        int $page_size = 100,
+        string $service_id = null
     ): array {
         $params = [
-            'ak' => Config::getApiKey(),
-            'service_id' => $service_id,
+            'ak' => $this->getAK(),
+            'service_id' => $service_id ?? $this->getDefaultServiceId(),
             'entity_name' => urlencode($entity_name),
             'start_time' => $start_time,
             'end_time' => $end_time,

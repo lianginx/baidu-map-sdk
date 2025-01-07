@@ -1,43 +1,44 @@
 <?php
 
-use BaiduMapSdk\Config;
 use BaiduMapSdk\Yingyan\Entity;
 use PHPUnit\Framework\TestCase;
 
 class EntityTest extends TestCase
 {
 
-    private static int $serviceId;
     private static string $entityName = 'test_entity';
+    private static Entity $entity;
 
     public static function setUpBeforeClass(): void
     {
-        Config::setApiKey(getenv('BAIDU_MAP_API_KEY'));
-        self::$serviceId = getenv('TEST_SERVICE_ID');
+        $ak = getenv('BAIDU_MAP_API_KEY');
+        $serviceId = getenv('TEST_SERVICE_ID');
+        self::$entity = new Entity($ak, $serviceId);
     }
 
     public static function tearDownAfterClass(): void
     {
-        Entity::delete(self::$serviceId, self::$entityName);
+        self::$entity->delete(self::$entityName);
+        self::$entity->delete(self::$entityName);
     }
 
     public function testAddEntity(): void
     {
-        Entity::add(self::$serviceId, self::$entityName);
+        self::$entity->add(self::$entityName);
 
         $this->assertTrue(true);
     }
 
     public function testUpdateEntity()
     {
-        Entity::update(self::$serviceId, self::$entityName, 'helloworld');
+        self::$entity->update(self::$entityName, 'helloworld');
 
         $this->assertTrue(true);
     }
 
     public function testEntityList()
     {
-        $list = Entity::list(self::$serviceId);
+        $list = self::$entity->list();
 
         $this->assertArrayHasKey('entities', $list);
         $this->assertIsArray($list['entities']);
@@ -45,7 +46,7 @@ class EntityTest extends TestCase
 
     public function testDeleteEntity()
     {
-        Entity::delete(self::$serviceId, self::$entityName);
+        self::$entity->delete(self::$entityName);
 
         $this->assertTrue(true);
     }
