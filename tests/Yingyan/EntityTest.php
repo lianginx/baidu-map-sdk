@@ -23,7 +23,7 @@ class EntityTest extends TestCase
 
     public function testAddEntity(): void
     {
-        Entity::add(self::$serviceId, self::$entityName, 'hello');
+        Entity::add(self::$serviceId, self::$entityName);
 
         $this->assertTrue(true);
     }
