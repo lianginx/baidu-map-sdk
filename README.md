@@ -14,6 +14,12 @@
   - [ ] 地理围栏管理
   - [ ] 地理围栏报警
 
+## 安装
+
+```bash
+composer require lianginx/baidu-map-sdk
+```
+
 ## 使用
 
 ```php
