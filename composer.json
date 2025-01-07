@@ -1,5 +1,5 @@
 {
-    "name": "liang/baidu-map-sdk-php",
+    "name": "lianginx/baidu-map-sdk-php",
     "description": "百度地图 PHP SDK",
     "autoload": {
         "psr-4": {
