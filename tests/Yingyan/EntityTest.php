@@ -19,7 +19,6 @@ class EntityTest extends TestCase
     public static function tearDownAfterClass(): void
     {
         self::$entity->delete(self::$entityName);
-        self::$entity->delete(self::$entityName);
     }
 
     public function testAddEntity(): void
