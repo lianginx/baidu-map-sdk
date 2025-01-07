@@ -1,5 +1,7 @@
 # 百度地图 SDK for PHP
 
+[![GitHub License](https://img.shields.io/github/license/lianginx/baidu-map-sdk)](https://github.com/lianginx/baidu-map-sdk/blob/main/LICENSE) [![Packagist Version](https://img.shields.io/packagist/v/lianginx/baidu-map-sdk)](https://packagist.org/packages/lianginx/baidu-map-sdk) [![GitHub Repo stars](https://img.shields.io/github/stars/lianginx/baidu-map-sdk)](https://github.com/lianginx/baidu-map-sdk)
+
 出于工作需要对百度地图开放 API 进行封装，封装结构简单易懂，有暂未实现的接口或需要改进的地方欢迎提交 PR。
 
 ## 支持的接口
