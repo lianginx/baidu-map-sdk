@@ -1,5 +1,5 @@
 {
-    "name": "lianginx/baidu-map-sdk-php",
+    "name": "lianginx/baidu-map-sdk",
     "description": "百度地图 PHP SDK",
     "license": "MIT",
     "autoload": {
