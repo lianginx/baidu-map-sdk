@@ -1,7 +1,6 @@
 {
     "name": "lianginx/baidu-map-sdk-php",
     "description": "百度地图 PHP SDK",
-    "version": "0.0.1",
     "license": "MIT",
     "autoload": {
         "psr-4": {
