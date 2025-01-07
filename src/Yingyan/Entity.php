@@ -21,17 +21,20 @@ class Entity
      */
     public static function add(int $service_id, string $entity_name, string $entity_desc = null, ...$column_key): void
     {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'entity_name' => urlencode($entity_name),
+        ];
+        if ($entity_desc !== null) {
+            $params['entity_desc'] = urlencode($entity_desc);
+        }
+        $params = array_merge($params, $column_key);
         new Client(
             EntityEnum::ADD_METHOD,
             EntityEnum::ADD,
             [
-                'form_params' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                    'entity_desc' => urlencode($entity_desc),
-                    ...$column_key,
-                ],
+                'form_params' => $params,
             ],
         );
     }
@@ -46,17 +49,20 @@ class Entity
      */
     public static function update(int $service_id, string $entity_name, string $entity_desc = null, ...$column_key): void
     {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'entity_name' => urlencode($entity_name),
+        ];
+        if ($entity_desc !== null) {
+            $params['entity_desc'] = urlencode($entity_desc);
+        }
+        $params = array_merge($params, $column_key);
         new Client(
             EntityEnum::UPDATE_METHOD,
             EntityEnum::UPDATE,
             [
-                'form_params' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                    'entity_desc' => urlencode($entity_desc),
-                    ...$column_key,
-                ],
+                'form_params' => $params,
             ],
         );
     }
@@ -98,24 +104,24 @@ class Entity
         int $page_index = 1,
         int $page_size = 100,
     ) {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'coord_type_output' => urlencode($coord_type_output),
+            'page_index' => $page_index,
+            'page_size' => $page_size,
+        ];
         if ($filter !== null) {
             foreach ($filter as $key => $value) {
                 $next_filter[] = "$key:$value";
             }
-            $filter = implode('|', $next_filter);
+            $params['filter'] = implode('|', $next_filter);
         }
         $client = new Client(
             EntityEnum::LIST_METHOD,
             EntityEnum::LIST ,
             [
-                'query' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'filter' => urlencode($filter),
-                    'coord_type_output' => urlencode($coord_type_output),
-                    'page_index' => $page_index,
-                    'page_size' => $page_size,
-                ],
+                'query' => $params,
             ],
         );
         return $client->toArray();

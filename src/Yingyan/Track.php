@@ -42,25 +42,36 @@ class Track
         string $object_name = null,
         ...$column_key
     ) {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'entity_name' => urlencode($entity_name),
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'loc_time' => $loc_time,
+            'coord_type_input' => $coord_type_input,
+        ];
+        if ($speed !== null) {
+            $params['speed'] = $speed;
+        }
+        if ($direction !== null) {
+            $params['direction'] = $direction;
+        }
+        if ($height !== null) {
+            $params['height'] = $height;
+        }
+        if ($radius !== null) {
+            $params['radius'] = $radius;
+        }
+        if ($object_name !== null) {
+            $params['object_name'] = $object_name;
+        }
+        $params = array_merge($params, $column_key);
         new Client(
             TrackEnum::ADD_POINT_METHOD,
             TrackEnum::ADD_POINT,
             [
-                'form_params' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                    'latitude' => $latitude,
-                    'longitude' => $longitude,
-                    'loc_time' => $loc_time,
-                    'coord_type_input' => $coord_type_input,
-                    'speed' => $speed,
-                    'direction' => $direction,
-                    'height' => $height,
-                    'radius' => $radius,
-                    'object_name' => $object_name,
-                    ...$column_key
-                ]
+                'form_params' => $params,
             ]
         );
     }
@@ -140,21 +151,24 @@ class Track
         string $supplement_mode = 'no_supplement',
         float $low_speed_threshold = null
     ): array {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'entity_name' => urlencode($entity_name),
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'is_processed' => (string) (int) $is_processed,
+            'process_option' => $process_option,
+            'supplement_mode' => $supplement_mode,
+        ];
+        if ($low_speed_threshold !== null) {
+            $params['low_speed_threshold'] = $low_speed_threshold;
+        }
         $client = new Client(
             TrackEnum::GET_DISTANCE_METHOD,
             TrackEnum::GET_DISTANCE,
             [
-                'query' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'is_processed' => (string) (int) $is_processed,
-                    'process_option' => $process_option,
-                    'supplement_mode' => $supplement_mode,
-                    'low_speed_threshold' => $low_speed_threshold,
-                ],
+                'query' => $params,
             ],
         );
         return $client->toArray();
@@ -191,26 +205,29 @@ class Track
         int $page_index = 1,
         int $page_size = 100
     ): array {
+        $params = [
+            'ak' => Config::getApiKey(),
+            'service_id' => $service_id,
+            'entity_name' => urlencode($entity_name),
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'is_processed' => (string) (int) $is_processed,
+            'process_option' => $process_option,
+            'supplement_mode' => $supplement_mode,
+            'supplement_content' => $supplement_content,
+            'coord_type_output' => $coord_type_output,
+            'sort_type' => $sort_type,
+            'page_index' => $page_index,
+            'page_size' => $page_size,
+        ];
+        if ($low_speed_threshold !== null) {
+            $params['low_speed_threshold'] = $low_speed_threshold;
+        }
         $client = new Client(
             TrackEnum::GET_TRACK_METHOD,
             TrackEnum::GET_TRACK,
             [
-                'query' => [
-                    'ak' => Config::getApiKey(),
-                    'service_id' => $service_id,
-                    'entity_name' => urlencode($entity_name),
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'is_processed' => (string) (int) $is_processed,
-                    'process_option' => $process_option,
-                    'supplement_mode' => $supplement_mode,
-                    'supplement_content' => $supplement_content,
-                    'low_speed_threshold' => $low_speed_threshold,
-                    'coord_type_output' => $coord_type_output,
-                    'sort_type' => $sort_type,
-                    'page_index' => $page_index,
-                    'page_size' => $page_size,
-                ],
+                'query' => $params,
             ],
         );
         return $client->toArray();
