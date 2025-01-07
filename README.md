@@ -32,7 +32,7 @@ $entity = new Entity($ak, $default_service_id);
 $entity_name = 'test_entity';
 
 // 新增终端
-$entity->add($service_id, $entity_name);
+$entity->add($entity_name);
 
 // 更新终端
 $entity->update($entity_name, 'hello world');
